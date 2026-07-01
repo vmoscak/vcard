@@ -746,7 +746,8 @@ body::before {
   border: none;
   cursor: pointer;
   transition: all 0.25s;
-  position: relative;
+  position: sticky;
+  bottom: 0;
   margin-top: 1.5rem;
   z-index: 20;
 }
@@ -943,8 +944,6 @@ body::before {
   font-family: 'Playfair Display', serif;
   font-weight: 600;
   font-style: italic;
-  position: relative;
-  z-index: 1;
 }
 .vmf-cta:hover {
   transform: translateY(-2px);
