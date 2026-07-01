@@ -439,13 +439,22 @@ body::before {
   max-width: 480px;
   max-height: 92dvh;
   border-radius: 20px 20px 0 0;
-  overflow-y: auto;
-  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
   transform: translateY(100%);
   transition: transform 0.45s cubic-bezier(0.32, 0.72, 0, 1);
-  -webkit-overflow-scrolling: touch;
   touch-action: pan-y;
   will-change: transform;
+}
+
+.sheet-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 1.5rem 1.25rem;
 }
 
 .modal-overlay.open .modal-sheet {
@@ -551,7 +560,7 @@ body::before {
   background: var(--mat-bg);
   color: var(--mat-text);
   font-family: 'DM Mono', monospace;
-  padding: 0 1.5rem 3rem;
+  padding: 0;
   position: relative;
   overflow: hidden;
 }
@@ -736,7 +745,8 @@ body::before {
   justify-content: center;
   gap: 0.5rem;
   width: 100%;
-  padding: 1.1rem;
+  flex-shrink: 0;
+  padding: 1.1rem 1.1rem calc(1.1rem + env(safe-area-inset-bottom, 0px));
   border-radius: 0;
   font-family: 'Syne', sans-serif;
   font-size: 0.9rem;
@@ -746,16 +756,12 @@ body::before {
   border: none;
   cursor: pointer;
   transition: all 0.25s;
-  position: sticky;
-  bottom: 0;
-  margin-top: 1.5rem;
   z-index: 20;
 }
 
 .mat-cta {
   background: var(--mat-accent);
   color: #fff;
-  margin-top: 0.5rem;
 }
 .mat-cta:hover {
   background: #e05000;
@@ -770,7 +776,7 @@ body::before {
   background: var(--vmf-bg);
   color: var(--vmf-text);
   font-family: 'DM Sans', sans-serif;
-  padding: 0 1.5rem 3rem;
+  padding: 0;
   position: relative;
   overflow: hidden;
 }
@@ -957,7 +963,7 @@ body::before {
   background: var(--web-bg);
   color: var(--web-text);
   font-family: 'Space Mono', monospace;
-  padding: 0 1.5rem 3rem;
+  padding: 0;
   position: relative;
   overflow: hidden;
 }
@@ -1264,6 +1270,7 @@ body::before {
       <span class="modal-handle-hint">Potiahni nadol</span>
     </div>
 
+    <div class="sheet-body">
     <div class="mat-header sheet-enter se-1">
       <h2 class="mat-title">MATERIA</h2>
       <p class="mat-sub">Výroba prototypov a produktov.<br>3D tlač · CNC · Laser · Skenovanie · Modelovanie.</p>
@@ -1315,8 +1322,10 @@ body::before {
       </a>
     </div>
 
+    </div>
+
     <!-- CTA -->
-    <a class="card-cta mat-cta sheet-enter se-6" href="mailto:info@materia.sk">
+    <a class="card-cta mat-cta" href="mailto:info@materia.sk">
       Nezáväzný dopyt
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
@@ -1331,6 +1340,7 @@ body::before {
       <span class="modal-handle-hint">Potiahni nadol</span>
     </div>
 
+    <div class="sheet-body">
     <div class="vmf-header sheet-enter se-1">
       
       <h2 class="vmf-title">VMfin</h2>
@@ -1386,8 +1396,10 @@ body::before {
       </a>
     </div>
 
+    </div>
+
     <!-- CTA -->
-    <a class="card-cta vmf-cta sheet-enter se-6" href="mailto:vmfin@vmfin.sk">
+    <a class="card-cta vmf-cta" href="mailto:vmfin@vmfin.sk">
       Konzultácia zdarma
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
@@ -1402,6 +1414,7 @@ body::before {
       <span class="modal-handle-hint">Potiahni nadol</span>
     </div>
 
+    <div class="sheet-body">
     <div class="web-header sheet-enter se-1">
       
       <h2 class="web-title">WEBIDO</h2>
@@ -1438,8 +1451,10 @@ body::before {
       </a>
     </div>
 
+    </div>
+
     <!-- CTA -->
-    <a class="card-cta web-cta sheet-enter se-5" href="https://webido.sk" target="_blank" rel="noopener">
+    <a class="card-cta web-cta" href="https://webido.sk" target="_blank" rel="noopener">
       Pozrieť portfólio
       <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
     </a>
@@ -1617,6 +1632,7 @@ function playDismissChime() {
     var overlay = sheet.closest('.modal-overlay');
     var backdrop = overlay.querySelector('.modal-backdrop');
     var handle = sheet.querySelector('.modal-handle');
+    var scroller = sheet.querySelector('.sheet-body') || sheet;
     var modalName = overlay.id.replace('modal-', '');
 
     var velSamples = [];
@@ -1641,11 +1657,11 @@ function playDismissChime() {
       pushSample(velSamples, y);
 
       if (!pulling) {
-        if (sheet.scrollTop > 0) {
+        if (scroller.scrollTop > 0) {
           startY = y;
           return;
         }
-        if (dy > 5 && sheet.scrollTop <= 0) pulling = true;
+        if (dy > 5 && scroller.scrollTop <= 0) pulling = true;
         else return;
       }
 
